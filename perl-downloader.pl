@@ -26,7 +26,7 @@ sub write_file
 
     {
         open my $f, '>', "$self->{file}";
-        print {$f} "$self->{content}";
+        print {$f} $self->{content};
         close $f;
     }
 
