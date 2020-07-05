@@ -10,7 +10,7 @@ use Getopt::Long;
 
 GetOptions(
     'url=s' => \my $url,
-    'files=s' => \my $files
+    'file=s' => \my $file
 );
 
 package downloader;
@@ -21,11 +21,11 @@ sub write_file
     my $class = shift;
     my $self = {
         'content' => shift,
-        'files' => shift
+        'file' => shift
     };
 
     {
-        open my $f, '>', "$self->{files}";
+        open my $f, '>', "$self->{file}";
         print {$f} "$self->{content}";
         close $f;
     }
@@ -38,10 +38,10 @@ sub get_file
     my $class = shift;
     my $self = {
         'url' => shift,
-        'files' => shift
+        'file' => shift
     };
     my $url = $self->{url};
-    my $files = $self->{files};
+    my $file = $self->{file};
     my $req = LWP::UserAgent->new;
     $req->agent('Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:75.0) Gecko/20100101 Firefox/75.0');
     my $response = $req->get($url);
@@ -50,13 +50,13 @@ sub get_file
 
         print "[+] Downloaded : $url\n";
 
-        if (write_file downloader($response->content, $files)) {
+        if (write_file downloader($response->content, $file)) {
 
-            print "[+] Saving files to : $files\n";
+            print "[+] Saving file to : $file\n";
 
         } else {
 
-            print "[-] Failed saving files to : $files\n";
+            print "[-] Failed saving file to : $file\n";
 
         }
 
@@ -70,4 +70,4 @@ sub get_file
 
 }
 
-get_file downloader($url, $files);
+get_file downloader($url, $file);
